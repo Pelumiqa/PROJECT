@@ -1,0 +1,346 @@
+{
+  "info": {
+    "_postman_id": "5429997a-ddbf-4051-b318-12dd84d8c7ed",
+    "name": "PROJECT",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "57231794",
+    "_collection_link": "https://go.postman.co/collection/57231794-5429997a-ddbf-4051-b318-12dd84d8c7ed?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "REGISTER NEW USER",
+      "item": [
+        {
+          "name": "register",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "\n// 1. Status Code Tests\npm.test(\"verify Status code is 201 - Successful registration\", function () {\n    pm.response.to.have.status(201);\n});\n\npm.test(\"verify Status code is not 500 - No server error\", function () {\n    pm.response.to.not.have.status(500);\n});\n\n// 2. Response Time Test\npm.test(\"verify Response time is less than 3000ms\", function () {\n    pm.expect(pm.response.responseTime).to.be.below(3000);\n});\n\n// 3. Response Headers Tests\npm.test(\"verify Content-Type header is present and contains 'application/json'\", function () {\n    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\n});\n\n// 4. Response Body Structure Tests\npm.test(\"verify Response body is valid JSON\", function () {\n    pm.response.to.be.json;\n});\n\nconst jsonData = pm.response.json();\n\npm.test(\"verify Response contains 'id' field\", function () {\n    pm.expect(jsonData).to.have.property(\"id\");\n});\n\npm.test(\"verify'id' field is a non-empty string\", function () {\n    pm.expect(jsonData.id).to.be.a(\"string\").and.to.not.be.empty;\n});\n\npm.test(\"verify Response contains 'first_name' field with value 'John'\", function () {\n    pm.expect(jsonData).to.have.property(\"first_name\");\n    pm.expect(jsonData.first_name).to.eql(\"John\");\n});\n\npm.test(\"verify Response contains 'last_name' field with value 'Doe'\", function () {\n    pm.expect(jsonData).to.have.property(\"last_name\");\n    pm.expect(jsonData.last_name).to.eql(\"Doe\");\n});\n\npm.test(\"verify Response contains 'email' field with value 'john@doe.example'\", function () {\n    pm.expect(jsonData).to.have.property(\"email\");\n    pm.expect(jsonData.email).to.eql(\"john@doe.example\");\n});\n\npm.test(\"verify Response contains 'phone' field\", function () {\n    pm.expect(jsonData).to.have.property(\"phone\");\n});\n\npm.test(\"verify Response contains 'dob' field\", function () {\n    pm.expect(jsonData).to.have.property(\"dob\");\n});\n\npm.test(\"verify Response contains 'address' object\", function () {\n    pm.expect(jsonData).to.have.property(\"address\");\n    pm.expect(jsonData.address).to.be.an(\"object\");\n});\n\npm.test(\"verify 'address' object contains required fields\", function () {\n    const address = jsonData.address;\n    pm.expect(address).to.have.property(\"street\");\n    pm.expect(address).to.have.property(\"city\");\n    pm.expect(address).to.have.property(\"state\");\n    pm.expect(address).to.have.property(\"country\");\n    pm.expect(address).to.have.property(\"postal_code\");\n});\n\npm.test(\"verify Password field is NOT returned in the response (security check)\", function () {\n    pm.expect(jsonData).to.not.have.property(\"password\");\n});\n\n// 5. Data Type Validation Tests\npm.test(\"verify 'id' is a string\", function () {\n    pm.expect(jsonData.id).to.be.a(\"string\");\n});\n\npm.test(\"verify 'first_name' is a string\", function () {\n    pm.expect(jsonData.first_name).to.be.a(\"string\");\n});\n\npm.test(\"verify 'last_name' is a string\", function () {\n    pm.expect(jsonData.last_name).to.be.a(\"string\");\n});\n\npm.test(\"verify 'email' is a string\", function () {\n    pm.expect(jsonData.email).to.be.a(\"string\");\n});\n\n// 6. Email Format Validation Test\npm.test(\"verify Returned email matches a valid email format\", function () {\n    const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\n    pm.expect(jsonData.email).to.match(emailRegex);\n});\n\n// 7. Store ID for reuse\nif (pm.response.code === 201) {\n    pm.collectionVariables.set(\"userId\", jsonData.id);\n    console.log(\"userId saved to collection variable: \" + jsonData.id);\n}\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"first_name\": \"John\",\r\n  \"last_name\": \"Doe\",\r\n  \"address\": {\r\n    \"street\": \"Street 1\",\r\n    \"house_number\": \"12\",\r\n    \"city\": \"City\",\r\n    \"state\": \"State\",\r\n    \"country\": \"Country\",\r\n    \"postal_code\": \"1234AA\"\r\n  },\r\n  \"phone\": \"0987654321\",\r\n  \"dob\": \"1970-01-01\",\r\n  \"password\": \"Aderogbaoolus@123\",\r\n  \"email\": \"prter@doe.example\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://api.practicesoftwaretesting.com/users/register",
+              "protocol": "https",
+              "host": [
+                "api",
+                "practicesoftwaretesting",
+                "com"
+              ],
+              "path": [
+                "users",
+                "register"
+              ]
+            },
+            "description": "Generated from cURL: curl -X 'POST' \\\r\n  'https://api.practicesoftwaretesting.com/users/register' \\\r\n  -H 'accept: application/json' \\\r\n  -H 'Content-Type: application/json' \\\r\n  -d '{\r\n  \"first_name\": \"John\",\r\n  \"last_name\": \"Doe\",\r\n  \"address\": {\r\n    \"street\": \"Street 1\",\r\n    \"house_number\": \"12\",\r\n    \"city\": \"City\",\r\n    \"state\": \"State\",\r\n    \"country\": \"Country\",\r\n    \"postal_code\": \"1234AA\"\r\n  },\r\n  \"phone\": \"0987654321\",\r\n  \"dob\": \"1970-01-01\",\r\n  \"password\": \"SuperSecure@123\",\r\n  \"email\": \"john@doe.example\"\r\n}'"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "LOGIN TO THE APPLICATION",
+      "item": [
+        {
+          "name": "login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// 1. Verify status code\r\npm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\n\r\n// 2. Verify response time\r\npm.test(\"Response time is less than 2000ms\", function () {\r\n    pm.expect(pm.response.responseTime).to.be.below(2000);\r\n});\r\n\r\n\r\n// 3. Verify response is JSON\r\npm.test(\"Response is JSON\", function () {\r\n    pm.response.to.be.json;\r\n});\r\n\r\n\r\n// Parse response\r\nconst jsonData = pm.response.json();\r\n\r\n\r\n// 4. Verify access_token exists\r\npm.test(\"Verify 'access_token' exists\", function () {\r\n    pm.expect(jsonData).to.have.property(\"access_token\");\r\n});\r\n\r\n\r\n// 5. Verify access_token is a string\r\npm.test(\"Verify 'access_token' is a string\", function () {\r\n    pm.expect(jsonData.access_token).to.be.a(\"string\");\r\n});\r\n\r\n\r\n// 6. Verify access_token is not empty\r\npm.test(\"Verify 'access_token' is not empty\", function () {\r\n    pm.expect(jsonData.access_token).to.not.be.empty;\r\n});\r\n\r\n\r\n// 7. Verify token_type exists\r\npm.test(\"Verify 'token_type' exists\", function () {\r\n    pm.expect(jsonData).to.have.property(\"token_type\");\r\n});\r\n\r\n\r\n// 8. Verify token_type is a string\r\npm.test(\"Verify 'token_type' is a string\", function () {\r\n    pm.expect(jsonData.token_type).to.be.a(\"string\");\r\n});\r\n\r\n\r\n// 9. Verify token_type is bearer\r\npm.test(\"Verify token_type is bearer\", function () {\r\n    pm.expect(jsonData.token_type.toLowerCase()).to.eql(\"bearer\");\r\n});\r\n\r\n\r\n// 10. Verify expires_in exists\r\npm.test(\"Verify 'expires_in' exists\", function () {\r\n    pm.expect(jsonData).to.have.property(\"expires_in\");\r\n});\r\n\r\n\r\n// 11. Verify expires_in is a number\r\npm.test(\"Verify 'expires_in' is a number\", function () {\r\n    pm.expect(jsonData.expires_in).to.be.a(\"number\");\r\n});\r\n\r\n\r\n// 12. Verify expires_in is greater than 0\r\npm.test(\"Verify 'expires_in' is greater than 0\", function () {\r\n    pm.expect(jsonData.expires_in).to.be.above(0);\r\n});\r\n\r\n\r\n// 13. Verify response contains only expected login fields\r\npm.test(\"Verify expected login response fields\", function () {\r\n    pm.expect(jsonData).to.have.all.keys(\r\n        \"access_token\",\r\n        \"token_type\",\r\n        \"expires_in\"\r\n    );\r\n});\r\n\r\n\r\n// 14. Verify Content-Type header\r\npm.test(\"Verify Content-Type is JSON\", function () {\r\n    pm.expect(pm.response.headers.get(\"Content-Type\"))\r\n        .to.include(\"application/json\");\r\n});\r\n\r\n\r\n// 15. Store access token for later requests\r\nif (pm.response.code === 200) {\r\n    pm.collectionVariables.set(\"access_token\", jsonData.access_token);\r\n\r\n    console.log(\"Access token saved successfully.\");\r\n}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{json_web_token_057m}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"aaderogbaaaa@doe.example\",\r\n  \"password\": \"Peeelumi@1321\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://api.practicesoftwaretesting.com/users/login",
+              "protocol": "https",
+              "host": [
+                "api",
+                "practicesoftwaretesting",
+                "com"
+              ],
+              "path": [
+                "users",
+                "login"
+              ]
+            },
+            "description": "Generated from cURL: curl -X 'POST' \\\r\n  'https://api.practicesoftwaretesting.com/users/login' \\\r\n  -H 'accept: application/json' \\\r\n  -H 'Content-Type: application/json' \\\r\n  -d '{\r\n  \"email\": \"SuperSecure@12333\",\r\n  \"password\": \"johne@doe.example\"\r\n}'"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "CHAGE PASSSWORD",
+      "item": [
+        {
+          "name": "change password",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// 1. Verify status code\r\npm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\n\r\n// 2. Verify response time\r\npm.test(\"Response time is less than 2000ms\", function () {\r\n    pm.expect(pm.response.responseTime).to.be.below(2000);\r\n});\r\n\r\n\r\n// 3. Verify response is JSON\r\npm.test(\"Response is JSON\", function () {\r\n    pm.response.to.be.json;\r\n});\r\n\r\n\r\n// Parse response\r\nconst jsonData = pm.response.json();\r\n\r\n\r\n// 4. Verify success field exists\r\npm.test(\"Verify 'success' exists\", function () {\r\n    pm.expect(jsonData).to.have.property(\"success\");\r\n});\r\n\r\n\r\n// 5. Verify success is a boolean\r\npm.test(\"Verify 'success' is a boolean\", function () {\r\n    pm.expect(jsonData.success).to.be.a(\"boolean\");\r\n});\r\n\r\n\r\n// 6. Verify password change was successful\r\npm.test(\"Verify password change was successful\", function () {\r\n    pm.expect(jsonData.success).to.eql(true);\r\n});\r\n\r\n\r\n// 7. Verify response contains only expected field\r\npm.test(\"Verify expected response fields\", function () {\r\n    pm.expect(jsonData).to.have.all.keys(\"success\");\r\n});\r\n\r\n\r\n// 8. Verify Content-Type header\r\npm.test(\"Verify Content-Type is JSON\", function () {\r\n    pm.expect(pm.response.headers.get(\"Content-Type\"))\r\n        .to.include(\"application/json\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{json_web_token_0qwo}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"current_password\": \"Pellu@1124\",\r\n  \"new_password\": \"Welcome02222@@\",\r\n  \"new_password_confirmation\": \"Welcome022222@@\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://api.practicesoftwaretesting.com/users/change-password",
+              "protocol": "https",
+              "host": [
+                "api",
+                "practicesoftwaretesting",
+                "com"
+              ],
+              "path": [
+                "users",
+                "change-password"
+              ]
+            },
+            "description": "Generated from cURL: curl -X 'POST' \\\r\n  'https://api.practicesoftwaretesting.com/users/change-password' \\\r\n  -H 'accept: application/json' \\\r\n  -H 'Content-Type: application/json' \\\r\n  -d '{\r\n  \"current_password\": \"SuperSecure@1223\",\r\n  \"new_password\": \"welcome022222\",\r\n  \"new_password_confirmation\": \"welcome022222\"\r\n}'"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "FORGOT PASSWORD",
+      "item": [
+        {
+          "name": "forgot password",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// 1. Verify status code\r\npm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\n\r\n// 2. Verify response time\r\npm.test(\"Response time is less than 2000ms\", function () {\r\n    pm.expect(pm.response.responseTime).to.be.below(2000);\r\n});\r\n\r\n\r\n// 3. Verify response is JSON\r\npm.test(\"Response is JSON\", function () {\r\n    pm.response.to.be.json;\r\n});\r\n\r\n\r\n// Parse response\r\nconst jsonData = pm.response.json();\r\n\r\n\r\n// 4. Verify 'success' exists\r\npm.test(\"Verify 'success' exists\", function () {\r\n    pm.expect(jsonData).to.have.property(\"success\");\r\n});\r\n\r\n\r\n// 5. Verify 'success' is a boolean\r\npm.test(\"Verify 'success' is a boolean\", function () {\r\n    pm.expect(jsonData.success).to.be.a(\"boolean\");\r\n});\r\n\r\n\r\n// 6. Verify forgot password was successful\r\npm.test(\"Verify forgot password was successful\", function () {\r\n    pm.expect(jsonData.success).to.eql(true);\r\n});\r\n\r\n\r\n// 7. Verify expected response fields\r\npm.test(\"Verify expected response fields\", function () {\r\n    pm.expect(jsonData).to.have.all.keys(\"success\");\r\n});\r\n\r\n\r\n// 8. Verify Content-Type is JSON\r\npm.test(\"Verify Content-Type is JSON\", function () {\r\n    pm.expect(pm.response.headers.get(\"Content-Type\"))\r\n        .to.include(\"application/json\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"elllLia@doe.example\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://api.practicesoftwaretesting.com/users/forgot-password",
+              "protocol": "https",
+              "host": [
+                "api",
+                "practicesoftwaretesting",
+                "com"
+              ],
+              "path": [
+                "users",
+                "forgot-password"
+              ]
+            },
+            "description": "Generated from cURL: curl -X 'POST' \\\r\n  'https://api.practicesoftwaretesting.com/users/forgot-password' \\\r\n  -H 'accept: application/json' \\\r\n  -H 'Content-Type: application/json' \\\r\n  -d '{\r\n  \"email\": \"customer@practicesoftwaretesting.com\"\r\n}'"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "LOGOUT",
+      "item": [
+        {
+          "name": "logout",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// 1. Verify status code\r\npm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\n\r\n// 2. Verify response time\r\npm.test(\"Response time is less than 2000ms\", function () {\r\n    pm.expect(pm.response.responseTime).to.be.below(2000);\r\n});\r\n\r\n\r\n// 3. Verify response is JSON\r\npm.test(\"Response is JSON\", function () {\r\n    pm.response.to.be.json;\r\n});\r\n\r\n\r\n// Parse response\r\nconst jsonData = pm.response.json();\r\n\r\n\r\n// 4. Verify 'message' exists\r\npm.test(\"Verify 'message' exists\", function () {\r\n    pm.expect(jsonData).to.have.property(\"message\");\r\n});\r\n\r\n\r\n// 5. Verify 'message' is a string\r\npm.test(\"Verify 'message' is a string\", function () {\r\n    pm.expect(jsonData.message).to.be.a(\"string\");\r\n});\r\n\r\n\r\n// 6. Verify logout was successful\r\npm.test(\"Verify logout was successful\", function () {\r\n    pm.expect(jsonData.message).to.eql(\"Successfully logged out\");\r\n});\r\n\r\n\r\n// 7. Verify message is not empty\r\npm.test(\"Verify 'message' is not empty\", function () {\r\n    pm.expect(jsonData.message).to.not.be.empty;\r\n});\r\n\r\n\r\n// 8. Verify expected response fields\r\npm.test(\"Verify expected response fields\", function () {\r\n    pm.expect(jsonData).to.have.all.keys(\"message\");\r\n});\r\n\r\n\r\n// 9. Verify Content-Type is JSON\r\npm.test(\"Verify Content-Type is JSON\", function () {\r\n    pm.expect(pm.response.headers.get(\"Content-Type\"))\r\n        .to.include(\"application/json\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{json_web_token_09ps}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "https://api.practicesoftwaretesting.com/users/logout",
+              "protocol": "https",
+              "host": [
+                "api",
+                "practicesoftwaretesting",
+                "com"
+              ],
+              "path": [
+                "users",
+                "logout"
+              ]
+            },
+            "description": "Generated from cURL: curl -X 'GET' \\\r\n  'https://api.practicesoftwaretesting.com/users/logout' \\\r\n  -H 'accept: application/json'"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "userId",
+      "value": ""
+    },
+    {
+      "key": "access_token",
+      "value": ""
+    },
+    {
+      "key": "json_web_token_1cc4",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_057m",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_0qwo",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_0dcc",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_0k2j",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_0h9m",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_09ps",
+      "secret": true
+    }
+  ]
+}
